@@ -26,10 +26,18 @@ var guestbookListener = null;
 async function main() {
 
   // Add Firebase project configuration object here
-  // var firebaseConfig = {};
+  var firebaseConfig = {
+    apiKey: "AIzaSyDS3fvfK6i_zSEbymPOMoYe_5vzXy4EM-g",
+    authDomain: "fir-web-codelab-b712a.firebaseapp.com",
+    databaseURL: "https://fir-web-codelab-b712a.firebaseio.com",
+    projectId: "fir-web-codelab-b712a",
+    storageBucket: "fir-web-codelab-b712a.appspot.com",
+    messagingSenderId: "681461295926",
+    appId: "1:681461295926:web:8dba5f33d55e9407362197"
+  };
 
   // firebase.initializeApp(firebaseConfig);
-
+firebase.initializeApp(firebaseConfig)
   // FirebaseUI config
   const uiConfig = {
     credentialHelper: firebaseui.auth.CredentialHelper.NONE,
@@ -46,7 +54,25 @@ async function main() {
     }
   };
 
-  // const ui = new firebaseui.auth.AuthUI(firebase.auth());
+  const ui = new firebaseui.auth.AuthUI(firebase.auth());
+  startRsvpButton.addEventListener("click", () => {
+    if(firebase.auth().currentUser) {
+      // userr is signed in; allows user to sign out
+      firebase.auth().signOut()
+    } else {
+      // No user is signed in; allows user to sign in
+      ui.start("#firebaseui-auth-container", uiConfig)
+    }
+  })
+
+  
+  firebase.auth().onAuthStateChanged((user) => {
+    if(user) {
+      startRsvpButton.textContent = "LOGOUT"
+    } else {
+      startRsvpButton.textContent = "RSVP"
+    }
+  })
 }
 main();
 
